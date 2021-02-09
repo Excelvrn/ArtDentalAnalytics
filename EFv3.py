@@ -61,14 +61,10 @@ def main2(opfile):
 def mainret(opfile):	
 	OpenedFile = open(opfile, 'r').read()
 	OpenedFileStat = os.stat(opfile)
-	
 	with open(opfile, 'r') as myfile:
 		data=myfile.readlines()
-	
 	example1 = text.PrintPositions3(OpenedFile, "\n")
-	
 	kkk=text.FindingList3(example1)
-
 	#for i in range(0,len(kkk)):
 	#	print(kkk[i])
 	return kkk
@@ -76,15 +72,11 @@ def mainret(opfile):
 def mainret1(opfile):
 	#	how to use
 	#	python3 EF.py file_name.txt > output_file_name.txt
-	
 	OpenedFile = open(opfile, 'r').read()
 	OpenedFileStat = os.stat(opfile)
-	
 	#with open(opfile, 'r') as myfile:
 	#	data=myfile.readlines()
-	
 	example1 = text.PrintPositions4(OpenedFile, ["\n", "\t"])
-	
 	for i in range(len(example1)-1,0,-1):
 		if (text.compare(example1[i], "Сче") == 1) :
 			del example1[i]
@@ -109,29 +101,10 @@ def mainret1(opfile):
 	for i in range(0, len(example1)):
 		print(example1[i])
 	return example1
-#обработка выдёргивание 1/2 с конца каждой строки с последующим формированием списка
-def mainret2(opfile):
-	#	how to use
-	#	python3 EF.py file_name.txt > output_file_name.txt
-	
-	OpenedFile = open(opfile, 'r').read()
-	OpenedFileStat = os.stat(opfile)
-	
-	#with open(opfile, 'r') as myfile:
-	#	data=myfile.readlines()
-	
-	example1 = text.PrintPositions4(OpenedFile, ["\n" ])
-	
-
-	for i in range(0, len(example1)):
-		print(example1[i])
-	return example1
-
 #объединение двух файлов, удаление повторов
 def unit(file1,file2):
 	l1 = mainret1(file1)
 	l2=mainret1(file2)
-	
 	nl=mainret(file1)
 	nl+=mainret(file2)
 	#print(len(nl))
@@ -140,6 +113,40 @@ def unit(file1,file2):
 		#print(i, kkk[i])
 	#	print(kkk[i])
 	text.Count4(l1, l2, kkk)
+	pass
+#обработка выдёргивание 1/2 с конца каждой строки с последующим формированием списка
+def mainret2(opfile):
+	#	how to use
+	#	python3 EF.py file_name.txt > output_file_name.txt
+	OpenedFile = open(opfile, 'r').read()
+	OpenedFileStat = os.stat(opfile)
+	#with open(opfile, 'r') as myfile:
+	#	data=myfile.readlines()
+	example1 = text.PrintPositions4(OpenedFile, "\n" )
+	print("example1[0]:\n", example1[0])
+	print("example1[1]:\n", example1[1])
+	#print(example1)
+	menuni = text.FindingList3(example1[0])
+	womenuni = text.FindingList3(example1[1])
+	mf = text.FindingList3(example1[1])
+	#print(text.Count4(example1[0], example1[1], mf))
+	#for i in range(0, len(menuni)):
+	#	print(menuni[i])
+	return [menuni, womenuni]#обработка выдёргивание 1/2 с конца каждой строки с последующим формированием списка
+def mainret3(opfile):
+	#	how to use
+	#	python3 EF.py file_name.txt > output_file_name.txt
+	OpenedFile = open(opfile, 'r').read()
+	OpenedFileStat = os.stat(opfile)
+	#with open(opfile, 'r') as myfile:
+	#	data=myfile.readlines()
+	example1 = text.PrintPositions4(OpenedFile, "\n" )
+	ex0 = example1[0]
+	ex1 = example1[1]
+	for i in range(0, len(ex0)):
+		print(ex0[i])
+	for i in range(0, len(ex1)):
+		print(ex1[i])
 	pass
 def start():
 	#print(sys.argv)
@@ -158,6 +165,8 @@ def start():
 		mainret1(sys.argv[2])
 	elif (sys.argv[1] == "back") and (len(sys.argv)==3):
 		mainret2(sys.argv[2])
+	elif (sys.argv[1] == "back1") and (len(sys.argv)==3):
+		mainret3(sys.argv[2])
 	else:
 		print("Insert params!")
 	pass
