@@ -132,29 +132,42 @@ def PrintPositions3(string,symb):
 	return nlist
 #Формирование листа. v.4
 def PrintPositions4(string,lsymb):
-	#print("PrintPositions3:\n")
-	nlist = []
-	elements=[]
-	elements1=[]
-	#print("Pos is\t", pos)
-	step1 = 0
-	if (len(lsymb)>1):
-		for i in range(0, len(lsymb)):
-			nlist+=getsymblist(string, lsymb[i])
-		nlist = sorted(nlist)
-		if (len(nlist)>2):
-			lel = 0
-			for i in range(1, len(nlist)):
-				elements += [string[lel:nlist[i]]]
-				lel = nlist[i]+1
-			for i in range(0,len(elements)):
-				if (len(elements[i])>2):
-					elements1 +=[elements[i]]
-	#print("1. nlist is:\t")
-	#for i in range(0, len(nlist)):
-	#	print(nlist[i])
-	#print("Nlist length is:\t",len(nlist))
-	return elements1
+	chastr = PrintPositions3(string, "\n")
+	startpos = 100
+	prevstartpos = 100
+	#print(chastr[0])
+	#print(len(chastr[0]))
+	men=[]
+	women=[]
+	for i in range(0, len(chastr)):
+		a = len(chastr[i])-1
+		if (i == 0):
+			if (chastr[i][a] == "2"):
+				startpos = 2
+				prevstartpos = 2
+			else:
+				startpos = 1
+				prevstartpos = 1
+		if (len(chastr[i])>4):
+			if (chastr[i][a] == "1"):
+				startpos = 1
+			else:
+				startpos = 2
+			if (startpos != prevstartpos):
+				#print(i, ":\t", prevstartpos, startpos)
+				prevstartpos = startpos
+			if (startpos == 1):
+				women+=[chastr[i]]
+			elif (startpos == 2):
+				men+=[chastr[i]]
+		#for i in range(0, len(men)):
+			#print(men[i])
+			#print(kkk[i])
+	ret = []
+	ret +=[men]
+	ret+=[women]
+	print(women)
+	return ret
 
 #Формирование листа с удалением повторяющихся элементов
 def FindingList(Flist):
@@ -285,8 +298,9 @@ def CompareEnd(endstring, found):
 	comparevv=0
 	if len(endstring)>len(found):
 		k=len(endstring)-1
+		m = len(found)-1
 		for i in range(0, len(found)):
-			if (endstring[k-i] == found[i]):
+			if (endstring[k-i] == found[m-i]):
 				comparev+=[1]
 			else:
 				comparev+=[0]
