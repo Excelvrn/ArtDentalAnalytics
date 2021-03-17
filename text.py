@@ -1,11 +1,11 @@
-#Разделение на слова
+from html.parser import HTMLParser#Разделение на слова
 #	return [начальная позиция, КонечнаяПозиция]
 #	КонечнаяПозиция: -1 - конец файла/последовательности
 def NextPosition(string, symb, startposition):
 	#print(string[startposition:(len(string)-1)])
 	#OpenedFile.find(";", position+1)
 	if (startposition>0):
-			startposition+=1
+		startposition+=1
 	if (startposition < len(string)):
 		k = string.find(symb, startposition)
 	else:
@@ -132,29 +132,42 @@ def PrintPositions3(string,symb):
 	return nlist
 #Формирование листа. v.4
 def PrintPositions4(string,lsymb):
-	#print("PrintPositions3:\n")
-	nlist = []
-	elements=[]
-	elements1=[]
-	#print("Pos is\t", pos)
-	step1 = 0
-	if (len(lsymb)>1):
-		for i in range(0, len(lsymb)):
-			nlist+=getsymblist(string, lsymb[i])
-		nlist = sorted(nlist)
-		if (len(nlist)>2):
-			lel = 0
-			for i in range(1, len(nlist)):
-				elements += [string[lel:nlist[i]]]
-				lel = nlist[i]+1
-			for i in range(0,len(elements)):
-				if (len(elements[i])>2):
-					elements1 +=[elements[i]]
-	#print("1. nlist is:\t")
-	#for i in range(0, len(nlist)):
-	#	print(nlist[i])
-	#print("Nlist length is:\t",len(nlist))
-	return elements1
+	chastr = PrintPositions3(string, "\n")
+	startpos = 100
+	prevstartpos = 100
+	#print(chastr[0])
+	#print(len(chastr[0]))
+	men=[]
+	women=[]
+	for i in range(0, len(chastr)):
+		a = len(chastr[i])-1
+		if (i == 0):
+			if (chastr[i][a] == "2"):
+				startpos = 2
+				prevstartpos = 2
+			else:
+				startpos = 1
+				prevstartpos = 1
+		if (len(chastr[i])>4):
+			if (chastr[i][a] == "1"):
+				startpos = 1
+			else:
+				startpos = 2
+			if (startpos != prevstartpos):
+				#print(i, ":\t", prevstartpos, startpos)
+				prevstartpos = startpos
+			if (startpos == 1):
+				women+=[chastr[i]]
+			elif (startpos == 2):
+				men+=[chastr[i]]
+		#for i in range(0, len(men)):
+			#print(men[i])
+			#print(kkk[i])
+	ret = []
+	ret +=[men]
+	ret+=[women]
+	print(women)
+	return ret
 
 #Формирование листа с удалением повторяющихся элементов
 def FindingList(Flist):
@@ -285,8 +298,9 @@ def CompareEnd(endstring, found):
 	comparevv=0
 	if len(endstring)>len(found):
 		k=len(endstring)-1
+		m = len(found)-1
 		for i in range(0, len(found)):
-			if (endstring[k-i] == found[i]):
+			if (endstring[k-i] == found[m-i]):
 				comparev+=[1]
 			else:
 				comparev+=[0]
@@ -383,3 +397,225 @@ def Count4(list1, list2, fl):
 	for i in range(0, len(fl)):
 		print(fl[i], l1[i], l2[i],sep="\t")
 	pass
+def TextSymbs(texto, sstr):
+	vc = 0
+	pos = 0
+	k=[]
+	for i in range(0, len(texto)):
+		for i2 in range(0, len(sstr)):
+			if (texto[i] == sstr[i2]):
+				if (i2 ==0):
+					pos = i
+				vc +=1
+#				print(i)
+			else:
+				vc = 0
+			if (vc == len(sstr)):
+				k+=[pos]
+	print(k)
+	pass 
+
+#find <tag>
+def findtag(instring,tag):
+	opened = "<"+tag + ">"
+	closed = "<"+"/" + tag + ">"
+	
+	print("findtag:",opened, closed)
+	
+	#pos = instring.find(tag)
+	
+	end = len(instring)
+	pos = 0
+	
+	#opened
+	ol = []
+	while (pos >-1):
+		pos = instring.find(opened,pos)
+		#print(pos)
+		if (pos>0):
+			ol += [pos]
+			pos +=1
+	print("OL:\t", len(ol))
+	
+	#closed
+	pos = 0
+	cl = []
+	while (pos >-1):
+		pos = instring.find(closed,pos)
+		#print(pos)
+		if (pos>0):
+			cl += [pos]
+			pos +=1
+	print("CL:\t", len(cl))
+	
+	#del one step elements
+	
+	if (len(ol)>1):
+		for iol in range(0, len(ol)):
+			a = ol[iol]
+		if (len(cl)>1):
+			for icl in range(0, len(cl)):
+				b = cl[icl]
+				d = abs(b-a)
+				if (d==1):
+					del ol[iol]
+	print("\tol:",ol)
+	print("\tcl:",cl)
+			
+	
+	pass
+
+#return "find <tag>"
+def getfindtag(instring,tag):
+	opened = "<"+tag + ">"
+	closed = "<"+"/" + tag + ">"
+	
+	#print("findtag:",opened, closed)
+	
+	#pos = instring.find(tag)
+	
+	end = len(instring)
+	pos = 0
+	
+	#opened
+	ol = []
+	while (pos >-1):
+		pos = instring.find(opened,pos)
+		#print(pos)
+		if (pos>0):
+			ol += [pos]
+			pos +=1
+	#print("OL:\t", len(ol))
+	
+	#closed
+	pos = 0
+	cl = []
+	while (pos >-1):
+		pos = instring.find(closed,pos)
+		#print(pos)
+		if (pos>0):
+			cl += [pos]
+			pos +=1
+	#print("CL:\t", len(cl))
+	
+	#del one step elements
+	
+	if (len(ol)>=1):
+		for iol in range(0, len(ol)):
+			a = ol[iol]
+		if (len(cl)>=1):
+			for icl in range(0, len(cl)):
+				b = cl[icl]
+				d = abs(b-a)
+				if (d==1):
+					del ol[iol]
+	#print("\tol:",ol)
+	#print("\tcl:",cl)
+	#ol:
+	if (len(ol)>1):
+		for i in range(0, len(ol)):
+			ol[i]+=len(opened)
+	elif (len(ol) ==1):
+		ol[0]+=len(opened)
+	#cl:
+	if (len(cl)>1):
+		for i in range(0, len(cl)):
+			cl[i]+=len(closed)
+	elif (len(ol) ==1):
+		cl[0]+=len(closed)
+	if (tag == "html"):
+		ol=ol[0]
+		cl = cl[0]
+	elif (tag == "body"):
+		ol=ol[0]
+		cl = cl[0]
+	elif (tag == "head"):
+		ol=ol[0]
+		cl = cl[0]
+		
+	return [ol, cl]
+
+def getbasictags(instring):
+	print("html", getfindtag(instring,"html"))
+	print("head", getfindtag(instring,"head"))
+	print("body", getfindtag(instring,"body"))
+	pass
+
+def getstings1(instring):
+	opened="<"
+	closed=">"
+	pos = 0
+	ol =[]
+	cl = []
+	while (pos>-1):
+		pos = instring.find(opened,pos)
+		print(pos)
+		if (pos>=0):
+			ol+=[pos]
+			pos +=1
+	pos = 0
+	while (pos>-1):
+		pos = instring.find(closed,pos)
+		print(pos)
+		if (pos>=0):
+			cl+=[pos]
+			pos +=1
+	print(len(ol), len(cl))
+	pass
+#get texto beetween <> and </> tags
+def getbetags(instring, NF):
+#instring - operated string
+#NF - New file with HTML and CRLF
+	NF.write("<!DOCTYPE html>\n")
+	class MyHTMLParser(HTMLParser):
+		i=0
+		ol=[]
+		cl=[]
+		NF = -1
+		var=0
+		wroten=""
+		def handle_starttag(self, tag, attrs):
+			self.i+=1
+			#print("Encountered a start tag:", tag)
+			#if (tag == tagf):
+				#self.ol+=[self.getpos()]
+			print(self.i,tag, self.getpos(), attrs)
+			self.wroten = "<" + tag + "\t"
+			if (len(attrs)):
+				#self.wroten+=str(len(attrs))
+				#self.wroten+="\t"
+				for i in range(0, len(attrs)):
+					if (len(attrs[i])==2):
+						self.wroten+=attrs[i][0]
+						self.wroten+="=\""
+						self.wroten+=attrs[i][1]
+					else:
+						self.wroten+=attrs[i][0]
+					self.wroten+="\"\t"
+						
+				#self.wroten+= k.split()
+			self.wroten+=">\n"
+			self.NF.write(self.wroten)
+			#se
+
+		def handle_endtag(self, tag):
+			self.i+=1
+			#print("Encountered an end tag :", tag)
+			#if (tag == tagf):
+				#self.cl+= [self.getpos()]
+			print(self.i,tag, self.getpos())
+			self.wroten = "</" + tag + ">" + "\n"
+			self.NF.write(self.wroten)
+
+		def handle_data(self, data):
+			#print("Encountered some data  :", data)
+			print("data:\t",self.getpos(),data)
+			self.NF.write(data)
+			self.NF.write("\n")
+	parser = MyHTMLParser()
+	parser.NF = NF
+	parser.feed(instring)
+	NF.close()
+	#print(instring[parser.ol[1]: parser.cl[1]])
+	return [parser.ol, parser.cl]
+	
